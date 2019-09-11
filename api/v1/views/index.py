@@ -24,5 +24,5 @@ def stats_class_count():
             'reviews': storage.count('Review'),
             'states': storage.count('State'),
             'users': storage.count('User')
-            }
-    return dic
+          }
+    return jsonify(dic)
