@@ -6,19 +6,7 @@ states view module
 from models import storage
 from models.base_model import BaseModel
 from api.v1.views import app_views
-from flask import Flask, jsonify, make_response
-
-
-'''
-d = storage.get("State", "421a55f4-7d82-47d9-b54c-a76916479546")
-print("d is ", d)
-if d:
-    storage.delete(d)
-    storage.save()
-    print("empty dic")
-else:
-    print("Not found")
-'''
+from flask import Flask, jsonify, make_response, request
 
 
 @app_views.route("/states", methods=["GET"])
@@ -44,7 +32,7 @@ def get_state_id(state_id):
 
 @app_views.route("/states/<state_id>", methods=["DELETE"])
 def delete_state_id(state_id):
-    """Deletes a state object"""
+    """Deletes a State object"""
     d = storage.get("State", state_id)
     if d:
         storage.delete(d)
@@ -52,3 +40,13 @@ def delete_state_id(state_id):
         return jsonify({})
     else:
         return make_response(jsonify({"error": "Not found"}), 404)
+
+
+@app_views.route("/states", methods=["POST"])
+def create_states():
+    """Creates a State object"""
+    print("####")
+    obj = request.get_json()
+    print("output type is", type(request.get_json))
+    print(obj.get("name"))
+    print("####")
