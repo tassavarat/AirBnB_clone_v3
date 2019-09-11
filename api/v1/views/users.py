@@ -53,7 +53,7 @@ def create_user():
         abort(400, {"Missing email"})
     if 'password' not in dic_t:
         abort(400, {"Missing password"})
-
+    print(dic_t)
     new_user = User(**dic_t)
     storage.new(new_user)
     storage.save()
@@ -70,7 +70,7 @@ def update_user(user_id):
         abort(404)
     if not dic_t:
         abort(400, {"Not a JSON"})
-    if 'email' in dic_t or 'password' in dic_t:
+    if 'email' in dic_t and 'password' in dic_t:
         for k, v in dic_t.items():
             setattr(d, k, v)
         storage.save()
