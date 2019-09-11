@@ -70,7 +70,7 @@ def update_user(user_id):
         abort(404)
     if not dic_t:
         abort(400, {"Not a JSON"})
-    if 'email' in dic_t and 'password' in dic_t:
+    if 'email' in dic_t or 'password' in dic_t:
         for k, v in dic_t.items():
             setattr(d, k, v)
         storage.save()
