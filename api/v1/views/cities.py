@@ -15,13 +15,12 @@ def get_city(state_id):
     """Returns all City objects based on State"""
     li = []
     d = storage.all("City").values()
+    if not storage.get("State", state_id):
+        abort(404)
     for city in d:
         if city.to_dict()["state_id"] == state_id:
             li.append(city.to_dict())
-    if li:
-        return jsonify(li), 200
-    else:
-        abort(404)
+    return jsonify(li), 200
 
 
 @app_views.route("/cities/<city_id>", methods=["GET"])
