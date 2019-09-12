@@ -12,7 +12,7 @@ from flask import Flask, jsonify, make_response, request, abort
 
 @app_views.route("/cities/<city_id>/places", methods=["GET"])
 def get_places(city_id):
-    """Returns all Place objects based on City"""
+    """Returns all Place objects based on Place"""
     li = []
     d = storage.all("Places").values()
     if not storage.get("City", city_id):
@@ -26,7 +26,7 @@ def get_places(city_id):
 @app_views.route("/places/<place_id>", methods=["GET"])
 def get_place_id(place_id):
     """Returns a Place object based on: place_id"""
-    d = storage.get("Place", city_id)
+    d = storage.get("Place", place_id)
     if d:
         return jsonify(d.to_dict()), 200
     else:
@@ -60,6 +60,7 @@ def create_place(city_id):
     if 'name' not in dic_t:
         abort(400, {"Missing name"})
     dic_t["city_id"] = city_id
+    # `dic_t["user_id"] = ?
     new_place = Place(**dic_t)
     storage.new(new_place)
     storage.save()
@@ -77,7 +78,9 @@ def update_places(place_id):
         abort(400, {"Not a JSON"})
     if 'name' in dic_t:
         for k, v in dic_t.items():
-            if k == 'name' or k == 'description' or k == 'number _rooms' or k == 'number_bathrooms' or k == 'max_guest' or k == 'price_by_night':
+            if k == 'name' or k == 'description' or \
+                    k == 'number _rooms' or k == 'number_bathrooms' or \
+                    k == 'max_guest' or k == 'price_by_night':
                 setattr(d, k, v)
                 storage.save()
     to_d = d.to_dict()
