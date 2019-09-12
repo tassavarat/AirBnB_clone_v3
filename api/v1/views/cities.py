@@ -49,13 +49,13 @@ def delete_city_id(city_id):
 def create_city(state_id):
     """Creates a City object"""
     dic_t = request.get_json()
-    dic_t["state_id"] = state_id
     if not storage.get("State", state_id):
         abort(404)
     if not dic_t:
         abort(400, {"Not a JSON"})
     if 'name' not in dic_t:
         abort(400, {"Missing name"})
+    dic_t["state_id"] = state_id
     new_city = City(**dic_t)
     storage.new(new_city)
     storage.save()
