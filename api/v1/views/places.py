@@ -60,7 +60,6 @@ def create_place(city_id):
     if 'name' not in dic_t:
         abort(400, {"Missing name"})
     dic_t["city_id"] = city_id
-    # `dic_t["user_id"] = ?
     new_place = Place(**dic_t)
     storage.new(new_place)
     storage.save()
@@ -76,12 +75,11 @@ def update_places(place_id):
         abort(404)
     if not dic_t:
         abort(400, {"Not a JSON"})
-    if 'name' in dic_t:
-        for k, v in dic_t.items():
-            if k == 'name' or k == 'description' or \
-                    k == 'number _rooms' or k == 'number_bathrooms' or \
-                    k == 'max_guest' or k == 'price_by_night':
-                setattr(d, k, v)
-                storage.save()
+    for k, v in dic_t.items():
+        if k == 'name' or k == 'description' or \
+                k == 'number _rooms' or k == 'number_bathrooms' or \
+                k == 'max_guest' or k == 'price_by_night':
+            setattr(d, k, v)
+            storage.save()
     to_d = d.to_dict()
     return jsonify(to_d), 200
