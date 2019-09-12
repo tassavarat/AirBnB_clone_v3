@@ -10,14 +10,24 @@ from api.v1.views import app_views
 from flask import Flask, jsonify, make_response, request, abort
 
 
+@app_views.route("/places", methods=["GET"])
+def get_places():
+    """Returns a JSON string"""
+    li = []
+    dic_t = storage.all('Place').values()
+    for i in dic_t:
+        js = i.to_dict()
+        li.append(js)
+    return jsonify(li), 200
+
+
 @app_views.route("/cities/<city_id>/places", methods=["GET"])
-def get_places(city_id):
+def get_places_by_cities(city_id):
     """Returns all Place objects based on Place"""
     li = []
-    d = storage.all("Places").values()
     if not storage.get("City", city_id):
         abort(404)
-    for place in d:
+    for place in storage.get("City", city_id).places:
         if place.to_dict()["city_id"] == city_id:
             li.append(place.to_dict())
     return jsonify(li), 200
