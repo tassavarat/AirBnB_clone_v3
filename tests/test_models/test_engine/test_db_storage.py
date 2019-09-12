@@ -90,15 +90,27 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Test that get is properly returning an object"""
-        first_state_id = list(storage.all("State").values())[0].id
-        self.assertTrue(type(storage.get("State", first_state_id)),
+        storage = FileStorage()
+        obj = State()
+        obj_id = obj.to_dict()["id"]
+        storage.new(obj)
+        self.assertEqual(storage.get("State", obj_id), obj)
+        self.assertTrue(type(storage.get("State", obj_id)),
                         models.state.State)
-        self.assertTrue(type(storage.get("Invalid_class", first_state_id)),
+        self.assertTrue(type(storage.get("Invalid_class", obj_id)),
                         None)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test that count is counting the number of objects in storage"""
         storage = FileStorage()
+        num = storage.count()
+        obj = State()
+        storage.new(obj)
+        self.assertEqual(storage.count(), num + 1)
+        num = storage.count("State")
+        obj = State()
+        storage.new(obj)
+        self.assertEqual(storage.count("State"), num + 1)
         self.assertTrue(type(storage.count()), int)
         self.assertTrue(type(storage.count("State")), int)
