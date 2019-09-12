@@ -27,7 +27,7 @@ def get_places_by_cities(city_id):
     li = []
     if not storage.get("City", city_id):
         abort(404)
-    for place in storage.get("City", city_id).places:
+    for place in storage.all("Place").values():
         if place.to_dict()["city_id"] == city_id:
             li.append(place.to_dict())
     return jsonify(li), 200
